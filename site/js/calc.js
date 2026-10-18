@@ -24,4 +24,15 @@ function pressure(){const w=v('p_w'),kg=v('p_kg'),srf=$('p_s').value,tl=$('p_tl'
  $('p_out').innerHTML=`Ориентир: <b>${f(lo,1)}–${f(hi,1)} bar</b> (${f(lo*14.5,0)}–${f(hi*14.5,0)} psi)<p class="disc"><b>Это очень приблизительная подсказка</b>, а не норма. Всегда оставайтесь в пределах давления, указанного на боковине покрышки и на ободе (у бескамерных ободов свой максимум). Начните с середины диапазона и подбирайте по ощущениям: слишком низкое давление — «змеиный укус» и удары обода, слишком высокое — тряска и плохое сцепление.</p>`}
 const calcs={tyre:[['t_bsd','t_w'],tyre],gear:[['g_rings','g_cogs','g_bsd','g_w','g_cad'],gear],chain:[['c_cs','c_f','c_r'],chain],spoke:[['s_erd','s_pcd','s_wl','s_wr','s_n','s_x','s_h'],spoke],pressure:[['p_w','p_kg','p_s','p_tl','p_bsd'],pressure]};
 for(const [ids,fn] of Object.values(calcs)){if(!$(ids[0]))continue;ids.forEach(i=>$(i)&&$(i).addEventListener('input',fn));fn()}
+
+function wheel(){const el=$('cateye');if(!el)return;const CH=JSON.parse(el.textContent);const b=v('w_bsd'),w=v('w_w'),ro=v('w_ro');
+ const est=Math.PI*(b+2*w);const same=CH.filter(r=>+r[0].split('-')[1]===b);let hit=same.find(r=>+r[0].split('-')[0]===Math.round(w));
+ let near=null;if(!hit&&same.length){near=same.reduce((a,r)=>Math.abs(+r[0].split('-')[0]-w)<Math.abs(+a[0].split('-')[0]-w)?r:a)}
+ const use=ro>0?ro:(hit?hit[2]:Math.round(est));
+ const src=ro>0?'ваш замер (роллаут)':hit?`таблица Cateye: ${hit[0]} (${hit[1]})`:'оценка по формуле π × (BSD + 2 × ширина)';
+ $('w_out').innerHTML=`Длина окружности: <b>${use} мм</b> · ${f(use/10,1)} см · ${f(use/25.4,1)}″ <span class="muted">— ${src}</span>`+
+ `<p class="disc">Для велокомпьютера с 4-значным вводом вводят миллиметры (${use}), с 3-значным — сантиметры (${Math.round(use/10)}).`+
+ (hit?'':near?` Ближайший размер в таблице Cateye для этого диаметра: ${near[0]} (${near[1]}) — ${near[2]} мм.`:'')+
+ (ro>0?'':' Реальная окружность зависит от модели покрышки, давления и веса ездока — точнее всего роллаут.')+'</p>'}
+const W_ids=['w_bsd','w_w','w_ro'];if($('w_bsd')){fillBSD('w_bsd',622);W_ids.forEach(i=>$(i).addEventListener('input',wheel));wheel()}
 })();

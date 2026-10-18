@@ -12,6 +12,21 @@ from glossary import TERMS
 from art_compat import A_COMPAT
 from art_susp_ebike import A_SUSP, A_EBIKE
 from art_other import A_BUY, A_FRAMES, A_HIST
+from round3 import TOOLS3, GUIDES3, TERMS3, A_R3, TROUBLE, TCATS3, MAINT, MAINT_LINKS, CATEYE, CATEYE_SRC
+_g3 = {g["id"] for g in GUIDES3}
+GUIDES[:] = [g for g in GUIDES if g["id"] not in _g3] + GUIDES3
+TOOLS += TOOLS3; TERMS += TERMS3
+A_COMPAT += A_R3
+for g in GUIDES:
+    if g["id"] == "hydraulic-bleed": g["note"] = "Пошагово для конкретных марок: [[guide:bleed-shimano|Shimano]], [[guide:bleed-sram|SRAM (DOT)]], [[guide:bleed-magura|Magura]]. После прокачки — [[guide:pad-bedin|приработка колодок]]."
+    if g["id"] == "disc-pads": g["note"] = "Новые колодки нужно приработать: [[guide:pad-bedin|как это сделать]]."
+for t in TOOLS:
+    if t["id"] == "torque-wrench": t["tips"] = t["tips"] + ["Моменты из руководств Shimano, SRAM и Campagnolo — в [[art:torque-table|таблице моментов]]"]; t.setdefault("img", "torque-click")
+for p in PARTS:
+    if p["id"] == "tyre": p.setdefault("specs", []).append("Длина окружности колеса для велокомпьютера — [[page:calc#wheelsize|калькулятор и таблица]]; совместимость с ободом — [[art:compat-tyre-rim|статья]].")
+    if p["id"] == "rim": p.setdefault("specs", []).append("Какие покрышки подходят ободу, маркировка C / TC / TSS (hookless) — [[art:compat-tyre-rim|статья]].")
+    if p["id"] == "tubeless": p["guides"] = p["guides"] + ["tubeless-plug"]
+    if p["id"] == "disc-brake": p["guides"] = p["guides"] + ["bleed-shimano", "bleed-sram", "bleed-magura", "pad-bedin"]
 ARTICLES = A_COMPAT + A_SUSP + A_EBIKE + A_BUY + A_FRAMES + A_HIST
 ACATS = [("compat", "Совместимость и стандарты", "compat/", "Какие детали подходят друг к другу: трансмиссия, каретки, колонки, тормоза, оси, размеры колёс."),
  ("susp", "Подвеска", "suspension/", "Как устроена подвеска, производители вилок и амортизаторов, настройка и обслуживание."),
@@ -26,7 +41,7 @@ SITE = os.path.join(ROOT, "site")
 CRED = json.load(open(os.path.join(ROOT, "content/credits.json")))
 LEVEL = {1: ("Легко", "easy"), 2: ("Средне", "mid"), 3: ("Сложно", "hard")}
 P = {p["id"]: p for p in PARTS}; T = {t["id"]: t for t in TOOLS}; G = {g["id"]: g for g in GUIDES}; TY = {t["id"]: t for t in TYPES}
-PAGES = {"calc": "calc/", "compat": "compat/", "suspension": "suspension/", "ebike": "ebike/", "buy": "buy/", "frames": "frames/", "history": "history/", "anatomy": "anatomy/", "types": "types/", "tools": "tools/", "guides": "guides/", "makers": "makers/", "build": "build/", "glossary": "glossary/", "credits": "credits/", "parts": "anatomy/#parts"}
+PAGES = {"trouble": "trouble/", "maintenance": "maintenance/", "calc": "calc/", "compat": "compat/", "suspension": "suspension/", "ebike": "ebike/", "buy": "buy/", "frames": "frames/", "history": "history/", "anatomy": "anatomy/", "types": "types/", "tools": "tools/", "guides": "guides/", "makers": "makers/", "build": "build/", "glossary": "glossary/", "credits": "credits/", "parts": "anatomy/#parts"}
 errors = []
 def path_of(kind, ident):
     base, _, frag = ident.partition("#")
@@ -80,7 +95,7 @@ def chips(kind, ids, R):
 def related(blocks):
     inner = "".join(f'<div class="rel"><h3>{t}</h3>{c}</div>' for t, c in blocks if c)
     return f'<section class="related"><h2>Связано</h2><div class="relgrid">{inner}</div></section>' if inner else ""
-NAV = [("history/", "История"), ("anatomy/", "Устройство"), ("types/", "Типы"), ("guides/", "Инструкции"), ("tools/", "Инструмент"), ("compat/", "Совместимость"), ("calc/", "Калькуляторы"), ("suspension/", "Подвеска"), ("ebike/", "Электро"), ("buy/", "Покупка"), ("makers/", "Производители"), ("build/", "Собрать самому"), ("frames/", "Рамы"), ("glossary/", "Словарь")]
+NAV = [("trouble/", "Что случилось?"), ("history/", "История"), ("anatomy/", "Устройство"), ("types/", "Типы"), ("guides/", "Инструкции"), ("tools/", "Инструмент"), ("compat/", "Совместимость"), ("calc/", "Калькуляторы"), ("suspension/", "Подвеска"), ("ebike/", "Электро"), ("buy/", "Покупка"), ("makers/", "Производители"), ("build/", "Собрать самому"), ("frames/", "Рамы"), ("maintenance/", "Чек-лист ТО"), ("glossary/", "Словарь")]
 def page(rel, title, body, crumbs=(), desc="", js=""):
     depth = rel.count("/") if rel.endswith("/") else rel.count("/")
     R = "../" * depth
@@ -92,7 +107,7 @@ def page(rel, title, body, crumbs=(), desc="", js=""):
     extra_js = f'<script src="{"../" * (rel.count("/"))}js/{js}" defer></script>' if js else ""
     doc = f"""<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)} — Вело-вселенная</title><meta name="description" content="{html.escape(desc or title)}">
-<link rel="icon" href="{R}img/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{R}css/style.css?v=2">
+<link rel="icon" href="{R}img/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{R}css/style.css?v=5"><link rel="manifest" href="{R}manifest.webmanifest"><meta name="theme-color" content="#0f766e"><link rel="apple-touch-icon" href="{R}img/icon-192.png">
 <script>document.documentElement.dataset.theme=localStorage.getItem('vu-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
 </head><body data-root="{R}">
 <header class="top"><div class="wrap topin"><a class="logo" href="{R}"><img src="{R}img/favicon.svg" alt="" width="28" height="28"><span>Вело<b>вселенная</b></span></a>
@@ -103,7 +118,7 @@ def page(rel, title, body, crumbs=(), desc="", js=""):
 <footer class="foot"><div class="wrap"><p><b>Вело-вселенная</b> — открытый справочник и виртуальная веломастерская: история, устройство, инструмент и инструкции.</p>
 <p class="partners"><a href="https://avtomaster24bot-lab.github.io/velopark-panasonic/">Velopark.kz</a> — японские велосипеды, электровелосипеды Panasonic и запчасти · <a href="https://avtomaster24bot-lab.github.io/velomarket/">VeloMarket</a> — объявления о продаже велосипедов и запчастей</p>
 <p class="small">Инструкции носят справочный характер. Моменты затяжки и порядок работ для конкретной модели всегда сверяйте с мануалом производителя. Фото — Wikimedia Commons, см. <a href="{R}credits/">источники и лицензии</a>; схемы нарисованы для сайта.</p></div></footer>
-<script src="{R}js/app.js?v=2" defer></script>{extra_js}</body></html>"""
+<script src="{R}js/app.js?v=3" defer></script>{extra_js}</body></html>"""
     out = os.path.join(SITE, rel if rel.endswith(".html") else rel + "index.html")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     open(out, "w").write(doc)
@@ -310,7 +325,7 @@ for cid, cname, chref, cdesc in ACATS:
 # ---------------- Calculators
 R = Rof("calc/")
 calc_body = f"""<h1>Калькуляторы</h1><p class="lead">Расчёты выполняются прямо в браузере. Результаты — ориентировочные: для точной подборки деталей сверяйтесь с данными производителя.</p>
-<p class="chips"><a href="#tyre">Размер шины</a> <a href="#gear">Передачи и скорость</a> <a href="#chain">Длина цепи</a> <a href="#spoke">Длина спиц</a> <a href="#pressure">Давление в шинах</a></p>
+<p class="chips"><a href="#tyre">Размер шины</a> <a href="#gear">Передачи и скорость</a> <a href="#chain">Длина цепи</a> <a href="#spoke">Длина спиц</a> <a href="#pressure">Давление в шинах</a> <a href="#wheelsize">Окружность колеса для велокомпьютера</a></p>
 <section class="calc" id="tyre"><h2>Размер шины: ETRTO ↔ дюймы ↔ французская система</h2>
 <label>Посадочный диаметр (BSD)<select id="t_bsd"></select></label><label>Ширина шины, мм<input id="t_w" type="number" value="37" min="16" max="130"></label>
 <div class="out" id="t_out"></div><p class="disc">Полная таблица размеров — в статье <a href="{R}a/compat-wheels/">«Размеры колёс и шин»</a>.</p></section>
@@ -330,14 +345,56 @@ calc_body = f"""<h1>Калькуляторы</h1><p class="lead">Расчёты 
 <label>Ширина шины, мм<input id="p_w" type="number" value="35"></label><label>Вес ездока с велосипедом, кг<input id="p_kg" type="number" value="85"></label>
 <label>Покрытие<select id="p_s"><option value="asphalt">Асфальт</option><option value="gravel">Грунт, гравий</option><option value="trail">Тропы МТБ</option><option value="snow">Снег, песок (фэтбайк)</option></select></label>
 <label>Бескамерка<input id="p_tl" type="checkbox"></label>
-<div class="out" id="p_out"></div><p class="disc">Как накачивать — <a href="{R}guides/pumping/">инструкция</a>.</p></section>"""
-page("calc/", "Калькуляторы", calc_body, [("Калькуляторы", None)], "Калькуляторы: размер шины ETRTO, передачи и скорость, длина цепи, длина спиц, давление", js="calc.js?v=1")
-for t_, a_ in [("Калькулятор размера шины ETRTO", "tyre"), ("Калькулятор передач, gear inches и скорости", "gear"), ("Калькулятор длины цепи", "chain"), ("Калькулятор длины спиц", "spoke"), ("Давление в шинах — ориентир", "pressure")]:
+<div class="out" id="p_out"></div><p class="disc">Как накачивать — <a href="{R}guides/pumping/">инструкция</a>.</p></section>
+<section class="calc" id="wheelsize"><h2>Окружность колеса для велокомпьютера</h2>
+<p>Велокомпьютер считает скорость и пробег по оборотам колеса, поэтому ему нужна длина окружности колеса. Обычно её вводят в миллиметрах (4 цифры) или, в некоторых моделях, в сантиметрах (3 цифры). Выберите размер по маркировке ETRTO на боковине покрышки (например, 37-622 = 700×37C = 28×1,40) или введите свой замер.</p>
+<label>Посадочный диаметр (BSD)<select id="w_bsd"></select></label><label>Ширина шины, мм<input id="w_w" type="number" value="25" min="16" max="130"></label><label>Свой замер роллаутом, мм (необязательно)<input id="w_ro" type="number" placeholder="например 2112"></label>
+<div class="out" id="w_out"></div>
+<h3>Как измерить точно (роллаут)</h3><ol><li>Накачайте шину до обычного давления. Поставьте колесо с датчиком так, чтобы ниппель был в самой нижней точке, и отметьте это место на полу.</li><li>Сядьте на велосипед (с вашим весом шина проминается) и прокатите его ровно на один оборот колеса — пока ниппель снова не окажется внизу. Отметьте вторую точку.</li><li>Измерьте расстояние между отметками рулеткой в миллиметрах (дюймы × 25,4 = мм) и введите его в велокомпьютер.</li></ol>
+<h3>Таблица окружностей (Cateye)</h3><p class="disc">Значения из опубликованной таблицы производителя велокомпьютеров Cateye (<a href="{CATEYE_SRC}">cateye.com, раздел поддержки</a>), выборка распространённых размеров. Cateye указывает, что реальная окружность зависит от давления, а значения в таблицах разных лет могут немного отличаться. Отдельных «кодов размера колеса» в новых приборах Cateye нет — вводится сама длина окружности; у других марок (Sigma, Garmin и т. д.) смотрите их руководства: в большинстве современных приборов также вводятся миллиметры или окружность определяется автоматически по GPS.</p>
+<div class="tablewrap"><table><thead><tr><th>ETRTO</th><th>Размер</th><th>Окружность, мм</th><th>см</th></tr></thead><tbody>{"".join(f"<tr><td>{a}</td><td>{b}</td><td><b>{c}</b></td><td>{round(c/10)}</td></tr>" for a, b, c in CATEYE)}</tbody></table></div>
+<script id="cateye" type="application/json">{json.dumps(CATEYE)}</script></section>"""
+page("calc/", "Калькуляторы", calc_body, [("Калькуляторы", None)], "Калькуляторы: размер шины ETRTO, передачи и скорость, длина цепи, длина спиц, давление", js="calc.js?v=3")
+for t_, a_ in [("Калькулятор размера шины ETRTO", "tyre"), ("Калькулятор передач, gear inches и скорости", "gear"), ("Калькулятор длины цепи", "chain"), ("Калькулятор длины спиц", "spoke"), ("Давление в шинах — ориентир", "pressure"), ("Окружность колеса для велокомпьютера (коды размера колеса)", "wheelsize")]:
     idx(t_, f"calc/#{a_}", "Калькулятор", t_)
 
+# ---------------- Troubleshooting
+R = Rof("trouble/")
+tcn = dict(TCATS3)
+def tlinks(t, R):
+    out = []
+    if t["guides"]: out.append("<span><b>Инструкции:</b> " + ", ".join(f'<a href="{R}guides/{g}/">{html.escape(G[g]["title"])}</a>' for g in t["guides"]) + "</span>")
+    if t["parts"]: out.append("<span><b>Детали:</b> " + ", ".join(f'<a href="{R}parts/{p}/">{html.escape(P[p]["ru"])}</a>' for p in t["parts"]) + "</span>")
+    if t["tools"]: out.append("<span><b>Инструмент:</b> " + ", ".join(f'<a href="{R}tools/{x}/">{html.escape(T[x]["ru"])}</a>' for x in t["tools"]) + "</span>")
+    for k, ids in (("guide", t["guides"]), ("part", t["parts"]), ("tool", t["tools"])):
+        for i in ids: path_of(k, i)
+    return '<div class="tl">' + "".join(out) + "</div>"
+tcards = "".join(f'''<details class="tcard" id="{t["id"]}" data-c="{t["cat"]}"><summary>{html.escape(t["title"])}<span class="tk">{tcn[t["cat"]]}</span></summary><p class="signs">{inline(t["signs"], R)}</p><ol class="causes">''' + "".join(f"<li><b>{inline(c, R)}</b>{inline(d, R)}</li>" for c, d in t["causes"]) + f"</ol>{tlinks(t, R)}</details>" for t in TROUBLE)
+tf = '<div class="filters" id="tf"><button data-c="all" class="on">Все</button>' + "".join(f'<button data-c="{c}">{n}</button>' for c, n in TCATS3) + "</div>"
+body = f"""<h1>Что случилось? Поиск неисправностей</h1><p class="lead">Выберите симптом — увидите вероятные причины от самых частых к редким, что проверить и ссылки на инструкции, детали и инструмент. Начинайте с простого: большинство проблем — это грязь, смазка, давление и регулировка.</p>
+<div class="tfbar"><input id="tq" type="search" placeholder="Опишите проблему: скрип, цепь слетает, тормоз трёт…" aria-label="Фильтр симптомов"><span id="tn" class="muted small"></span></div>{tf}<div class="tcards">{tcards}</div>
+<div class="warn"><b>⚠ Важно</b><ul><li>Если что-то не так с тормозами, рулём, вилкой или рамой (трещины, люфт, утечка) — не ездите до ремонта.</li><li>Причины перечислены как вероятные, а не единственно возможные. Если не уверены — покажите велосипед мастеру.</li></ul></div>"""
+page("trouble/", "Что случилось? Поиск неисправностей", body, [("Что случилось?", None)], "Поиск неисправностей велосипеда: скрипы, передачи, тормоза, колёса, подвеска, планетарные втулки, e-bike", js="extra.js?v=1")
+idx("Что случилось? Поиск неисправностей", "trouble/", "Раздел", "неисправность симптом диагностика скрип не работает сломалось")
+for t in TROUBLE: idx(t["title"], f"trouble/#{t['id']}", "Неисправность", t["signs"] + " " + " ".join(c for c, d in t["causes"]))
+# ---------------- Maintenance checklist
+R = Rof("maintenance/")
+msecs = ""
+for sid, sn, items in MAINT:
+    lis = "".join(f'<li><label><input type="checkbox" id="m-{sid}-{i}"> <span>{html.escape(x)}</span></label></li>' for i, x in enumerate(items))
+    lk = ", ".join(f'<a href="{R}guides/{g}/">{html.escape(G[g]["title"])}</a>' for g in MAINT_LINKS[sid])
+    for g in MAINT_LINKS[sid]: path_of("guide", g)
+    msecs += f'<section><h2>{sn}</h2><ul>{lis}</ul><p class="mlinks no-print">Инструкции: {lk}</p></section>'
+body = f"""<h1>Чек-лист обслуживания велосипеда</h1><p class="lead">Что проверять перед каждой поездкой, раз в неделю, в месяц и в сезон. Отметки сохраняются в этом браузере; лист можно распечатать и повесить в мастерской. Интервалы общие — для конкретных узлов (вилка, тормоза, планетарная втулка, e-bike) действуют рекомендации производителя.</p>
+<div class="mbtns"><button id="mprint" class="pri">🖨 Распечатать</button><button id="mreset">Сбросить отметки</button></div>
+<p class="print-only">Вело-вселенная · avtomaster24bot-lab.github.io/velo-universe/maintenance/ · Велосипед: ____________ Дата: ________</p>
+<div class="mcheck">{msecs}</div><p class="no-print">Что-то не так? — <a href="{R}trouble/">поиск неисправностей</a>. Моменты затяжки — <a href="{R}a/torque-table/">таблица</a>.</p>"""
+page("maintenance/", "Чек-лист обслуживания", body, [("Чек-лист ТО", None)], "Чек-лист обслуживания велосипеда: перед поездкой, раз в неделю, в месяц, в сезон — с печатью", js="extra.js?v=1")
+idx("Чек-лист обслуживания (для печати)", "maintenance/", "Раздел", "обслуживание ТО регламент проверка перед поездкой неделя месяц сезон печать " + " ".join(" ".join(i) for _, _, i in MAINT))
 # home
 R = ""
-sec = [("history/", "История", f"{len(HISTORY)} вех: от дрезины 1817 года до e-bike", "penny"),
+sec = [("trouble/", "Что случилось?", f"{len(TROUBLE)} симптомов: причины и что делать", "worn-pads"),
+       ("history/", "История", f"{len(HISTORY)} вех: от дрезины 1817 года до e-bike", "penny"),
        ("anatomy/", "Устройство", f"Интерактивная схема и {len(PARTS)} деталей", "crankset"),
        ("types/", "Типы велосипедов", f"{len(TYPES)} типов: шоссе, МТБ, город, BMX…", "mtb"),
        ("guides/", "Инструкции", f"{len(GUIDES)} пошаговых инструкций", "nexus7"),
@@ -346,21 +403,25 @@ sec = [("history/", "История", f"{len(HISTORY)} вех: от дрезин
        ("build/", "Собрать самому", "Совместимость и порядок сборки", "chain-tool"),
        ("glossary/", "Словарь", "Термины RU / EN с объяснением", "valves"),
        ("compat/", "Совместимость", "Скорости, барабаны, каретки, колонки, тормоза, оси", "headset-exploded"),
-       ("calc/", "Калькуляторы", "Шины, передачи, цепь, спицы, давление", "wheel-build"),
+       ("calc/", "Калькуляторы", "Шины, передачи, цепь, спицы, давление, велокомпьютер", "wheel-build"),
        ("suspension/", "Подвеска", "RockShox, Fox, SR Suntour, Lefty, настройка сага", "fox-float"),
        ("ebike/", "Электровелосипеды", "Bosch, Shimano, Yamaha, Panasonic, Bafang, батареи", "bosch-cx"),
        ("buy/", "Покупка и подбор", "Б/у японский велосипед, размер рамы", "bridgestone"),
-       ("frames/", "Рамостроение", "Муфты, TIG, пайка, карбон, бамбук", "lugs-head")]
+       ("frames/", "Рамостроение", "Муфты, TIG, пайка, карбон, бамбук", "lugs-head"),
+       ("maintenance/", "Чек-лист обслуживания", "Перед поездкой, неделя, месяц, сезон — можно распечатать", "torque-click")]
 cards = "".join(card(R, h, t, s, i) for h, t, s, i in sec)
 path_g = ["m-check", "nexus-tube", "sag-setup", "chain-clean", "rd-adjust", "sa3-tube", "wheel-true", "wheel-build", "lefty-service"]
 pg = "".join(f'<a class="pathstep" href="guides/{g}/">{badge(G[g]["level"])}<span>{html.escape(G[g]["title"])}</span></a>' for g in path_g)
 body = f"""<section class="hero"><div><h1>Вело-вселенная</h1><p class="lead">Всё о велосипедах в одном месте: история, устройство, названия деталей, инструмент и пошаговые инструкции — от замены камеры на планетарной втулке до разбора вилки Cannondale Lefty.</p>
-<p class="stats"><span><b>{len(HISTORY)}</b> вех истории</span><span><b>{len(PARTS)}</b> деталей</span><span><b>{len(TYPES)}</b> типов</span><span><b>{len(TOOLS)}</b> инструментов</span><span><b>{len(GUIDES)}</b> инструкций</span><span><b>{len(terms)}</b> терминов</span><span><b>{len(ARTICLES)}</b> статей</span><span><b>5</b> калькуляторов</span></p></div>
+<p class="stats"><span><b>{len(HISTORY)}</b> вех истории</span><span><b>{len(PARTS)}</b> деталей</span><span><b>{len(TYPES)}</b> типов</span><span><b>{len(TOOLS)}</b> инструментов</span><span><b>{len(GUIDES)}</b> инструкций</span><span><b>{len(terms)}</b> терминов</span><span><b>{len(ARTICLES)}</b> статей</span><span><b>6</b> калькуляторов</span></p></div>
 <div class="herosvg">{DIAGRAMS['anatomy'][1](R)}</div></section>
 <h2>Разделы</h2><div class="grid">{cards}</div>
 <h2>Мастерская: от простого к сложному</h2><div class="path">{pg}</div>
 <h2>С чего начать</h2><div class="grid three"><a class="card" href="anatomy/"><div><h3>Не знаю, как что называется</h3><p>Откройте схему и нажмите на деталь.</p></div></a><a class="card" href="guides/nexus-tube/"><div><h3>Проколол колесо на городском велосипеде</h3><p>Замена камеры на втулке Shimano Nexus.</p></div></a><a class="card" href="tools/"><div><h3>Собираю набор инструмента</h3><p>Что купить в первую очередь.</p></div></a></div>"""
 page("index.html", "Энциклопедия и мастерская велосипеда", body, (), "Вело-вселенная: история, устройство, типы велосипедов, инструмент и пошаговые инструкции по ремонту")
+page("offline/", "Нет соединения", '<h1>Нет соединения с интернетом</h1><p class="lead">Эта страница ещё не сохранена для офлайн-чтения. Открытые раньше страницы, калькуляторы, поиск неисправностей и чек-лист доступны без сети.</p><p><a href="../">На главную</a> · <a href="../trouble/">Что случилось?</a> · <a href="../calc/">Калькуляторы</a> · <a href="../maintenance/">Чек-лист</a></p>')
+import time as _t
+open(os.path.join(SITE, "sw.js"), "w").write(open(os.path.join(ROOT, "tools/sw.template.js")).read().replace("__V__", _t.strftime("%Y%m%d%H%M%S")))
 page("404.html", "Страница не найдена", '<h1>Страница не найдена</h1><p>Попробуйте поиск вверху или вернитесь на <a href="/velo-universe/">главную</a>.</p>')
 for h, t, s, i in sec: idx(t, h, "Раздел", s)
 f404 = os.path.join(SITE, "404.html"); open(f404, "w").write(open(f404).read().replace("<head>", '<head><base href="/velo-universe/">', 1))

@@ -22,4 +22,5 @@ if(q){q.addEventListener('focus',load);q.addEventListener('input',async()=>{awai
 const gf=$('#gf');if(gf)gf.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;gf.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const l=b.dataset.l;
  document.querySelectorAll('.gcard').forEach(c=>c.style.display=(l==='0'||c.dataset.level===l)?'':'none');
  document.querySelectorAll('.gcat').forEach(h=>{const g=h.nextElementSibling;const any=[...g.children].some(c=>c.style.display!=='none');h.style.display=g.style.display=any?'':'none'})});
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register(R+'sw.js').catch(()=>{});
 })();

@@ -678,5 +678,65 @@
   "w": 1200,
   "h": 801,
   "desc": "2010 Commencal Supreme DH v2 full suspension downhill mountain bike with 200mm travel in both front and rear. Linkage driven single pivot rear suspension with 2010 Fox DHX RC4 shock. Dual crown telescopic fork in front, namely 2010 RockShox BoXXer Team."
+ },
+ "tl-sealant": {
+  "file": "Road bike tubeless sealant.jpg",
+  "author": "Glory Cycles",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Road_bike_tubeless_sealant.jpg",
+  "w": 640,
+  "h": 640,
+  "desc": "Residual sealant from a road bike tire. 31 grams"
+ },
+ "tl-plugkit": {
+  "file": "Tubeless tire plug kit from Slime - 02.jpg",
+  "author": "Richard Masoner / Cyclelicious",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Tubeless_tire_plug_kit_from_Slime_-_02.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Tubeless tire plug kit from Slime Photos okay to use, attribute and link to www.cyclelicio.us."
+ },
+ "worn-pads": {
+  "file": "Worn metallic disc brake pads.jpg",
+  "author": "Troy Sankey",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Worn_metallic_disc_brake_pads.jpg",
+  "w": 1200,
+  "h": 831,
+  "desc": "Worn metallic disc brake pads taken out of Avid BB7 disc brake calipers. These pads began at about 3mm of pad material to about 1mm (as pictured)."
+ },
+ "torque-click": {
+  "file": "Craftsman click torque wrench.jpg",
+  "author": "J.C. Fields (Talk) (Uploads)",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Craftsman_click_torque_wrench.jpg",
+  "w": 1200,
+  "h": 442,
+  "desc": "A Craftsman ⅜\"-drive in.lbs. click torque wrench, manufactured by the Danaher Corporation."
+ },
+ "magura-rotor": {
+  "file": "Magura Julie disk brake rotor 160 mm.jpg",
+  "author": "Petar Milošević",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Magura_Julie_disk_brake_rotor_160_mm.jpg",
+  "w": 1200,
+  "h": 1178,
+  "desc": "Magura Julie disc brake rotor 160 mm (MTB brake)"
+ },
+ "residual-sealant": {
+  "file": "Residual Sealant.jpg",
+  "author": "Glory Cycles",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Residual_Sealant.jpg",
+  "w": 640,
+  "h": 640,
+  "desc": "Residual sealant in a tubeless bicycle tire"
  }
 }

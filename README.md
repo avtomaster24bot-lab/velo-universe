@@ -5,7 +5,7 @@
 Сайт: https://avtomaster24bot-lab.github.io/velo-universe/
 
 ## Как устроено
-- `content/` — весь текст в виде структурированных данных (Python-модули): `parts.py`, `toollist.py`, `guides.py`, `biketypes.py`, `history.py`, `makers.py`, `buildguide.py`, `glossary.py`, статьи `art_compat.py`, `art_susp_ebike.py`, `art_other.py`, `credits.json` (источники фото). Калькуляторы — `site/js/calc.js`.
+- `content/` — весь текст в виде структурированных данных (Python-модули): `parts.py`, `toollist.py`, `guides.py`, `biketypes.py`, `history.py`, `makers.py`, `buildguide.py`, `glossary.py`, статьи `art_compat.py`, `art_susp_ebike.py`, `art_other.py`, `round3.py` (неисправности, бескамерка, прокачка, моменты, чек-лист, таблица Cateye), `credits.json` (источники фото). Калькуляторы — `site/js/calc.js`.
 - Ссылки внутри текста пишутся как `[[part:chain|цепь]]`, `[[tool:chain-tool]]`, `[[guide:nexus-tube]]`, `[[type:mtb]]`, `[[page:history]]` — сборщик проверяет, что цель существует.
 - `tools/build.py` — генерирует статический сайт в `site/` (HTML + поисковый индекс `search.json`).
 - `tools/svgs.py` — собственные SVG-схемы (анатомия, геометрия, трансмиссия, колесо, втулка, вилка/Lefty, планетарная передача).

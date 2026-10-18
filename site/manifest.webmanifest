@@ -1,0 +1,2 @@
+{"name":"Вело-вселенная","short_name":"Вело-вселенная","description":"Энциклопедия и виртуальная веломастерская: устройство, инструкции, калькуляторы","lang":"ru","start_url":"./","scope":"./","display":"standalone","background_color":"#f7f8f6","theme_color":"#0f766e",
+"icons":[{"src":"img/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"img/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"},{"src":"img/favicon.svg","sizes":"any","type":"image/svg+xml"}]}
