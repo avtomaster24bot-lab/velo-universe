@@ -378,5 +378,305 @@
   "w": 1200,
   "h": 1097,
   "desc": "A Park Tool crank extractor and cone wrench (with an off-brand adjustable wrench)."
+ },
+ "sa-aw": {
+  "file": "Sturmey Archer AW r.jpg",
+  "author": "No machine-readable author provided. Juergen Brauckmann assumed (based on copyright claims).",
+  "license": "Public domain",
+  "license_url": "",
+  "source": "https://commons.wikimedia.org/wiki/File:Sturmey_Archer_AW_r.jpg",
+  "w": 588,
+  "h": 444,
+  "desc": "Sturmey&amp;Archer bicycle 3 speed hub"
+ },
+ "sa-3spd": {
+  "file": "Sturmeyarcher.jpg",
+  "author": "Suttonpubcrawl at English Wikipedia",
+  "license": "CC BY 2.5",
+  "license_url": "https://creativecommons.org/licenses/by/2.5",
+  "source": "https://commons.wikimedia.org/wiki/File:Sturmeyarcher.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "This is a photo of a Sturmey Archer AW type three speed hub gear. The photo was taken by me (Robin May) and the gear is in my Raleigh Chiltern Pioneer bike. The hub shown in the photograph was made in 1998. Copyright (c) Robin May 2006"
+ },
+ "rohloff": {
+  "file": "Rohloff Speedhub mit Scheibenbremsaufnahme.jpg",
+  "author": "Derstuff",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Rohloff_Speedhub_mit_Scheibenbremsaufnahme.jpg",
+  "w": 900,
+  "h": 1200,
+  "desc": "Rohloff Speedhub 500/14mit Scheibenbremsaufnahme"
+ },
+ "rohloff-prod": {
+  "file": "Rohloff Speedhub-Naben in Produktion.jpg",
+  "author": "Derstuff",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Rohloff_Speedhub-Naben_in_Produktion.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Rohloff Speedhub 500/14 in Produktion"
+ },
+ "alfine11": {
+  "file": "Shimano Alfine SG-S700.JPG",
+  "author": "Keanu4",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Shimano_Alfine_SG-S700.JPG",
+  "w": 1200,
+  "h": 800,
+  "desc": "Shimano Alfine S-GS700 11 speed epicyclic internally geared hub, without auxilliary components."
+ },
+ "alfine8": {
+  "file": "Shimano Alfine SG-S500.JPG",
+  "author": "Keanu4",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Shimano_Alfine_SG-S500.JPG",
+  "w": 1200,
+  "h": 900,
+  "desc": "Shimano Alfine S-GS500 8 speed epicyclic internally geared hub, laced with spokes and mounted on bicycle."
+ },
+ "nexus-cortina": {
+  "file": "Nexus hub on Cortina Foss.jpg",
+  "author": "Andrej Shadura",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Nexus_hub_on_Cortina_Foss.jpg",
+  "w": 900,
+  "h": 1200,
+  "desc": "Close-up of a Shimano Nexus Inter 7-speed hub (SG-C3001-7R) on Cortina Foss Blue Haze Matt bicycle, with roller brake attached to it"
+ },
+ "chaincase": {
+  "file": "Popal Daily Dutch bicycle chain case.jpg",
+  "author": "Andrej Shadura",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Popal_Daily_Dutch_bicycle_chain_case.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Close-up of a chain case on Popal Daily Dutch bicycle"
+ },
+ "bosch-cx": {
+  "file": "Bosch Performance Line CX, Cycling World Europe 2025, Meerbusch (P1045149).jpg",
+  "author": "Matti Blume",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Bosch_Performance_Line_CX,_Cycling_World_Europe_2025,_Meerbusch_(P1045149).jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Bosch Performance Line CX mid-mounted e-bike motor at Cycling World Europe 2025"
+ },
+ "shimano-ep8": {
+  "file": "E-bike electric motor shimano ep 8.jpg",
+  "author": "Alextredz",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:E-bike_electric_motor_shimano_ep_8.jpg",
+  "w": 1200,
+  "h": 800,
+  "desc": "A close-up image of the electric motor on an e-bike or electric bike. We originally took this image for use in our E-Bike statistics blogpost but have since decided to distribute it under Creative Commons Attribution Licensing. This means you have our permission to use it in any way you wish - but p"
+ },
+ "hub-motor": {
+  "file": "Electric bicycle with front motor.jpg",
+  "author": "AnonymousUnknown author",
+  "license": "Public domain",
+  "license_url": "",
+  "source": "https://commons.wikimedia.org/wiki/File:Electric_bicycle_with_front_motor.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Photo of a power-assisted bicycle with a front wheel brushless electric motor. Photo taken after the outfitting of a new bike in June 2006, with a Nikon Coolpix 3700 compact camera."
+ },
+ "yamaha-pas": {
+  "file": "Yamaha electric assist bicycle pas.JPG",
+  "author": "Rainmaker47",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Yamaha_electric_assist_bicycle_pas.JPG",
+  "w": 1200,
+  "h": 803,
+  "desc": "Yamaha Electric Assist Bicycle PAS in the Yamaha Communication Plaza."
+ },
+ "ebike-japan": {
+  "file": "Electric Bicycle Japan.jpg",
+  "author": "HAL-Guandu",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Electric_Bicycle_Japan.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Panasonic Pedelec in Kanzawa, Japan"
+ },
+ "panasonic-ebike": {
+  "file": "Panasonic (P1046232).jpg",
+  "author": "Matti Blume",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Panasonic_(P1046232).jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Panasonic electric bicycle motor"
+ },
+ "bridgestone": {
+  "file": "Japanese -keikaisha- BRIDGESTONE MESSAGE Men's Type.jpg",
+  "author": "imoni",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Japanese_-keikaisha-_BRIDGESTONE_MESSAGE_Men%27s_Type.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "日本の軽快車 ブリヂストン社製「メッセージ」紳士用（1990年代）"
+ },
+ "tokyo-parking": {
+  "file": "Bicycle shed in front of apartments building in Tokyo.jpg",
+  "author": "Syced",
+  "license": "CC0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Bicycle_shed_in_front_of_apartments_building_in_Tokyo.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "Bicycle shed in front of apartments building in Tokyo"
+ },
+ "lug": {
+  "file": "Stainless lug.jpg",
+  "author": "Suzyj at English Wikipedia",
+  "license": "Public domain",
+  "license_url": "",
+  "source": "https://commons.wikimedia.org/wiki/File:Stainless_lug.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "A stainless steel Henry James seat lug, polished to a mirror finish, with a filed cutout."
+ },
+ "lugs-head": {
+  "file": "Hetchins head tube Coventry Transport Museum.jpg",
+  "author": "...some guy",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Hetchins_head_tube_Coventry_Transport_Museum.jpg",
+  "w": 800,
+  "h": 1200,
+  "desc": "Coventry Transport Museum, UK. 2009"
+ },
+ "bamboo": {
+  "file": "Bamboo bike frame Bamboosero.jpg",
+  "author": "Noah Scalin",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Bamboo_bike_frame_Bamboosero.jpg",
+  "w": 1200,
+  "h": 800,
+  "desc": "Handmade Bicycle Show 2010 Bamboo Frame from Bamboosero"
+ },
+ "tig": {
+  "file": "Kogswell Model G--BB detail.JPG",
+  "author": "Mishaweis (talk) (Uploads)",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Kogswell_Model_G--BB_detail.JPG",
+  "w": 1200,
+  "h": 796,
+  "desc": "Detailed of TIG-welded bottom bracket on Kogswell G. Only known example of mixed lugged and welded bicycle frame construction."
+ },
+ "framebuilding": {
+  "file": "UFV Bicycle frame building (8639725699).jpg",
+  "author": "University of the Fraser Valley",
+  "license": "CC BY 2.0",
+  "license_url": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:UFV_Bicycle_frame_building_(8639725699).jpg",
+  "w": 1200,
+  "h": 800,
+  "desc": "UFV Bicyle frame-building"
+ },
+ "ukraina": {
+  "file": "W120 bike.jpg",
+  "author": "Віктор Ходєєв /Viktor Khodyeyev",
+  "license": "Public domain",
+  "license_url": "",
+  "source": "https://commons.wikimedia.org/wiki/File:W120_bike.jpg",
+  "w": 1200,
+  "h": 947,
+  "desc": "USSR bicycle W-120 Ukraina (Kharkiv bicycle factory) 1961"
+ },
+ "aist": {
+  "file": "AistWiki.jpg",
+  "author": "Victor Khodeyeyv",
+  "license": "CC0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:AistWiki.jpg",
+  "w": 1200,
+  "h": 947,
+  "desc": "USSR bike typ 113-321 Aist, 1989"
+ },
+ "ural": {
+  "file": "Велосипед \"Урал\" модель 111-621 выпуск 1989 года.jpg",
+  "author": "Ev292",
+  "license": "CC0",
+  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B5%D0%BB%D0%BE%D1%81%D0%B8%D0%BF%D0%B5%D0%B4_%22%D0%A3%D1%80%D0%B0%D0%BB%22_%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D1%8C_111-621_%D0%B2%D1%8B%D0%BF%D1%83%D1%81%D0%BA_1989_%D0%B3%D0%BE%D0%B4%D0%B0.jpg",
+  "w": 1200,
+  "h": 900,
+  "desc": "This photo was taken on May 9, 2025; this Ural bicycle is over 35 years old."
+ },
+ "keirin": {
+  "file": "Omiya keirin finish 3.jpg",
+  "author": "Paulkeller",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Omiya_keirin_finish_3.jpg",
+  "w": 1200,
+  "h": 803,
+  "desc": "racers sprinting to the finish line in the last lap of a keirin race on the omiya velodrome in the tokyo metropolitan area"
+ },
+ "rockshox-reba": {
+  "file": "Rock Shox Reba Race.jpg",
+  "author": "Sylenius",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Rock_Shox_Reba_Race.jpg",
+  "w": 900,
+  "h": 1200,
+  "desc": "Reba Race fork from Rock Shox"
+ },
+ "fox-float": {
+  "file": "BikeSuspensionFork FoxFloatRLC150 1.jpg",
+  "author": "Owen Richard",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:BikeSuspensionFork_FoxFloatRLC150_1.jpg",
+  "w": 800,
+  "h": 1200,
+  "desc": "2010 Fox Float RLC 150 Bike Suspension Fork"
+ },
+ "judy": {
+  "file": "Judy Rock Shox1.jpg",
+  "author": "Roberta F.",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Judy_Rock_Shox1.jpg",
+  "w": 800,
+  "h": 530,
+  "desc": "RockShox Judy SL"
+ },
+ "wheel-build": {
+  "file": "Mostly built wheel on a truing stand.jpg",
+  "author": "Seth Vidal",
+  "license": "CC BY-SA 2.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mostly_built_wheel_on_a_truing_stand.jpg",
+  "w": 900,
+  "h": 1200,
+  "desc": "Mostly built wheel on a truing stand."
+ },
+ "dh-bike": {
+  "file": "DownhillMountainBike 2010 Commencal Supreme DH v2.jpg",
+  "author": "Victorvandenberg",
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:DownhillMountainBike_2010_Commencal_Supreme_DH_v2.jpg",
+  "w": 1200,
+  "h": 801,
+  "desc": "2010 Commencal Supreme DH v2 full suspension downhill mountain bike with 200mm travel in both front and rear. Linkage driven single pivot rear suspension with 2010 Fox DHX RC4 shock. Dual crown telescopic fork in front, namely 2010 RockShox BoXXer Team."
  }
 }

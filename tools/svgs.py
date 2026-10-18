@@ -239,3 +239,24 @@ def planetary(R):
     return "".join(s)
 DIAGRAMS = {"anatomy": ("Схема велосипеда", anatomy), "geometry": ("Геометрия рамы", geometry), "drivetrain": ("Трансмиссия", drivetrain),
             "wheel": ("Колесо в разрезе", wheel), "hub": ("Втулка в разрезе", hub), "fork": ("Вилки: обычная и Lefty", fork), "planetary": ("Планетарная передача", planetary)}
+
+def lacing(R):
+    s = ['<svg viewBox="0 0 960 380" class="diagram" role="img" aria-label="Схемы спицовки: радиальная, в два креста, в три креста">']
+    panels = [(0, "Радиальная (0 крестов)"), (2, "В два креста"), (3, "В три креста")]
+    n = 16  # отверстий на одном фланце (колесо на 32 спицы)
+    for pi, (k, name) in enumerate(panels):
+        cx, cy, Rr, rh = 160 + pi * 320, 180, 140, 34
+        s.append(f'<circle cx="{cx}" cy="{cy}" r="{Rr}" class="rim"/><circle cx="{cx}" cy="{cy}" r="{rh}" class="ring"/>')
+        for j in range(n):
+            a = 2 * math.pi * j / n
+            hx, hy = cx + rh * math.cos(a), cy + rh * math.sin(a)
+            d = 1 if j % 2 == 0 else -1
+            b = a + d * k * 2 * math.pi / n
+            rx, ry = cx + Rr * math.cos(b), cy + Rr * math.sin(b)
+            cls = "spk1" if d == 1 else "spk2"
+            s.append(f'<line x1="{hx:.1f}" y1="{hy:.1f}" x2="{rx:.1f}" y2="{ry:.1f}" class="{cls}"/>')
+            s.append(f'<circle cx="{hx:.1f}" cy="{hy:.1f}" r="2.5" class="hubc"/>')
+        s.append(f'<text x="{cx}" y="350" text-anchor="middle" class="dl">{name}</text>')
+    s.append('<text x="480" y="374" text-anchor="middle" class="dl small">Показан один фланец колеса на 32 спицы (16 спиц). Зелёные — ведущие, оранжевые — ведомые спицы.</text></svg>')
+    return "".join(s)
+DIAGRAMS["lacing"] = ("Схемы спицовки колеса", lacing)

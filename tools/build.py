@@ -9,12 +9,24 @@ from history import HISTORY, ERAS
 from makers import MAKERS, MAKERS_INTRO, MCATS
 from buildguide import BUILD_INTRO, BUILD_STEPS, BUILD_WARN
 from glossary import TERMS
+from art_compat import A_COMPAT
+from art_susp_ebike import A_SUSP, A_EBIKE
+from art_other import A_BUY, A_FRAMES, A_HIST
+ARTICLES = A_COMPAT + A_SUSP + A_EBIKE + A_BUY + A_FRAMES + A_HIST
+ACATS = [("compat", "Совместимость и стандарты", "compat/", "Какие детали подходят друг к другу: трансмиссия, каретки, колонки, тормоза, оси, размеры колёс."),
+ ("susp", "Подвеска", "suspension/", "Как устроена подвеска, производители вилок и амортизаторов, настройка и обслуживание."),
+ ("ebike", "Электровелосипеды", "ebike/", "Типы приводов, системы Bosch, Shimano, Yamaha, Panasonic, Bafang, безопасность батарей и уход."),
+ ("buy", "Покупка и подбор", "buy/", "Как выбрать размер рамы и проверить б/у велосипед перед покупкой."),
+ ("frames", "Рамостроение", "frames/", "Как делают рамы и с чего начать, если хочется построить раму самому."),
+ ("hist", "История: подробнее", "history/#more", "")]
+A = {a["id"]: a for a in ARTICLES}
+EXT = {"checklist": "https://avtomaster24bot-lab.github.io/bike-checklist/"}
 from svgs import DIAGRAMS
 SITE = os.path.join(ROOT, "site")
 CRED = json.load(open(os.path.join(ROOT, "content/credits.json")))
 LEVEL = {1: ("Легко", "easy"), 2: ("Средне", "mid"), 3: ("Сложно", "hard")}
 P = {p["id"]: p for p in PARTS}; T = {t["id"]: t for t in TOOLS}; G = {g["id"]: g for g in GUIDES}; TY = {t["id"]: t for t in TYPES}
-PAGES = {"history": "history/", "anatomy": "anatomy/", "types": "types/", "tools": "tools/", "guides": "guides/", "makers": "makers/", "build": "build/", "glossary": "glossary/", "credits": "credits/", "parts": "anatomy/#parts"}
+PAGES = {"calc": "calc/", "compat": "compat/", "suspension": "suspension/", "ebike": "ebike/", "buy": "buy/", "frames": "frames/", "history": "history/", "anatomy": "anatomy/", "types": "types/", "tools": "tools/", "guides": "guides/", "makers": "makers/", "build": "build/", "glossary": "glossary/", "credits": "credits/", "parts": "anatomy/#parts"}
 errors = []
 def path_of(kind, ident):
     base, _, frag = ident.partition("#")
@@ -24,15 +36,18 @@ def path_of(kind, ident):
     elif kind == "guide": ok, p = base in G, f"guides/{base}/"
     elif kind == "type": ok, p = base in TY, f"types/{base}/"
     elif kind == "page": ok, p = base in PAGES, PAGES.get(base, "")
+    elif kind == "art": ok, p = base in A, f"a/{base}/"
+    elif kind == "ext": ok, p = base in EXT, EXT.get(base, "")
     else: ok, p = False, ""
     if not ok: errors.append(f"bad ref {kind}:{ident}")
     return p + frag
 def name_of(kind, ident):
-    return {"part": lambda i: P[i]["ru"], "tool": lambda i: T[i]["ru"], "guide": lambda i: G[i]["title"], "type": lambda i: TY[i]["ru"]}.get(kind, lambda i: i)(ident)
+    return {"part": lambda i: P[i]["ru"], "tool": lambda i: T[i]["ru"], "guide": lambda i: G[i]["title"], "type": lambda i: TY[i]["ru"], "art": lambda i: A[i]["title"]}.get(kind, lambda i: i)(ident)
 def md(text, R):
     def rep(m):
         kind, ident, label = m.group(1), m.group(2), m.group(3)
-        return f'<a href="{R}{path_of(kind, ident)}">{html.escape(label or name_of(kind, ident))}</a>'
+        pre = "" if kind == "ext" else R
+        return f'<a href="{pre}{path_of(kind, ident)}">{html.escape(label or name_of(kind, ident))}</a>'
     out = []
     for para in text.strip().split("\n"):
         para = para.strip()
@@ -65,8 +80,8 @@ def chips(kind, ids, R):
 def related(blocks):
     inner = "".join(f'<div class="rel"><h3>{t}</h3>{c}</div>' for t, c in blocks if c)
     return f'<section class="related"><h2>Связано</h2><div class="relgrid">{inner}</div></section>' if inner else ""
-NAV = [("history/", "История"), ("anatomy/", "Устройство"), ("types/", "Типы"), ("guides/", "Инструкции"), ("tools/", "Инструмент"), ("makers/", "Производители"), ("build/", "Собрать самому"), ("glossary/", "Словарь")]
-def page(rel, title, body, crumbs=(), desc=""):
+NAV = [("history/", "История"), ("anatomy/", "Устройство"), ("types/", "Типы"), ("guides/", "Инструкции"), ("tools/", "Инструмент"), ("compat/", "Совместимость"), ("calc/", "Калькуляторы"), ("suspension/", "Подвеска"), ("ebike/", "Электро"), ("buy/", "Покупка"), ("makers/", "Производители"), ("build/", "Собрать самому"), ("frames/", "Рамы"), ("glossary/", "Словарь")]
+def page(rel, title, body, crumbs=(), desc="", js=""):
     depth = rel.count("/") if rel.endswith("/") else rel.count("/")
     R = "../" * depth
     nav = "".join(f'<a href="{R}{h}">{n}</a>' for h, n in NAV)
@@ -74,9 +89,10 @@ def page(rel, title, body, crumbs=(), desc=""):
     if crumbs:
         bc = '<nav class="crumbs" aria-label="Навигация"><a href="' + R + '">Главная</a>' + "".join(
             (f' <span>›</span> <a href="{R}{h}">{html.escape(n)}</a>' if h else f' <span>›</span> <b>{html.escape(n)}</b>') for n, h in crumbs) + "</nav>"
+    extra_js = f'<script src="{"../" * (rel.count("/"))}js/{js}" defer></script>' if js else ""
     doc = f"""<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)} — Вело-вселенная</title><meta name="description" content="{html.escape(desc or title)}">
-<link rel="icon" href="{R}img/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{R}css/style.css?v=1">
+<link rel="icon" href="{R}img/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{R}css/style.css?v=2">
 <script>document.documentElement.dataset.theme=localStorage.getItem('vu-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
 </head><body data-root="{R}">
 <header class="top"><div class="wrap topin"><a class="logo" href="{R}"><img src="{R}img/favicon.svg" alt="" width="28" height="28"><span>Вело<b>вселенная</b></span></a>
@@ -87,7 +103,7 @@ def page(rel, title, body, crumbs=(), desc=""):
 <footer class="foot"><div class="wrap"><p><b>Вело-вселенная</b> — открытый справочник и виртуальная веломастерская: история, устройство, инструмент и инструкции.</p>
 <p class="partners"><a href="https://avtomaster24bot-lab.github.io/velopark-panasonic/">Velopark.kz</a> — японские велосипеды, электровелосипеды Panasonic и запчасти · <a href="https://avtomaster24bot-lab.github.io/velomarket/">VeloMarket</a> — объявления о продаже велосипедов и запчастей</p>
 <p class="small">Инструкции носят справочный характер. Моменты затяжки и порядок работ для конкретной модели всегда сверяйте с мануалом производителя. Фото — Wikimedia Commons, см. <a href="{R}credits/">источники и лицензии</a>; схемы нарисованы для сайта.</p></div></footer>
-<script src="{R}js/app.js?v=1" defer></script></body></html>"""
+<script src="{R}js/app.js?v=2" defer></script>{extra_js}</body></html>"""
     out = os.path.join(SITE, rel if rel.endswith(".html") else rel + "index.html")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     open(out, "w").write(doc)
@@ -109,6 +125,10 @@ for p in PARTS:
     for t in p["tools"]: parts_of_tool.setdefault(t, []).append(p["id"])
 for g in GUIDES:
     for t in g["tools"]: guides_of_tool.setdefault(t, []).append(g["id"])
+arts_of = {}
+for a_ in ARTICLES:
+    for k_ in ("parts", "guides", "types", "tools"):
+        for x_ in a_.get(k_, []): arts_of.setdefault((k_, x_), []).append(a_["id"])
 gname = dict(GROUPS)
 for p in PARTS:
     rel = f"parts/{p['id']}/"; R = Rof(rel)
@@ -122,7 +142,7 @@ for p in PARTS:
     others = [q["id"] for q in PARTS if q["group"] == p["group"] and q["id"] != p["id"]]
     body = f"""<article class="item"><div class="kicker">{gname[p['group']]}</div><h1>{html.escape(p['ru'])}</h1><p class="en">{html.escape(p['en'])}</p>
 <p class="lead">{inline(p['short'], R)}</p><div class="cols"><div>{P_html(p['text'], R)}{specs}</div><div>{fig(p.get('img'), R)}{dg}</div></div></article>"""
-    body += related([("Инструкции", guides_html), ("Инструмент", chips("tool", p["tools"], R)), ("Где встречается", chips("type", types_of_part.get(p["id"], []), R)), ("Соседние детали", chips("part", others, R))])
+    body += related([("Инструкции", guides_html), ("Инструмент", chips("tool", p["tools"], R)), ("Где встречается", chips("type", types_of_part.get(p["id"], []), R)), ("Статьи", chips("art", arts_of.get(("parts", p["id"]), []), R)), ("Соседние детали", chips("part", others, R))])
     page(rel, p["ru"], body, [("Устройство", "anatomy/"), (p["ru"], None)], p["short"])
     idx(p["ru"], rel, "Деталь", p["short"] + " " + p["text"], p["en"])
 # ---------------- Tools
@@ -150,7 +170,7 @@ for g in GUIDES:
     body = f"""<article class="item guide"><div class="kicker">Инструкция · {gcn[g['cat']]}</div><h1>{html.escape(g['title'])}</h1>
 <div class="meta">{badge(g['level'])}<span>⏱ {html.escape(g['time'])}</span><span>{len(g['steps'])} шагов</span></div>
 <p class="lead">{inline(g['intro'], R)}</p>{fig(g.get('img'), R, 'gimg')}{tools_box}{warn}<h2>Пошагово</h2><ol class="steps">{steps}</ol>{note}</article>"""
-    body += related([("Детали", chips("part", g["parts"], R)), ("Инструмент", chips("tool", g["tools"], R)), ("Типы велосипедов", tchips)])
+    body += related([("Детали", chips("part", g["parts"], R)), ("Инструмент", chips("tool", g["tools"], R)), ("Типы велосипедов", tchips), ("Статьи", chips("art", arts_of.get(("guides", g["id"]), []), R))])
     page(rel, g["title"], body, [("Инструкции", "guides/"), (g["title"], None)], g["intro"][:150])
     idx(g["title"], rel, "Инструкция · " + LEVEL[g["level"]][0], g["intro"] + " " + " ".join(g["steps"]))
 # ---------------- Types
@@ -161,10 +181,13 @@ for t in TYPES:
     guides_html = '<ul class="glist">' + "".join(f'<li><a href="{R}guides/{x}/">{html.escape(G[x]["title"])}</a> {badge(G[x]["level"])}</li>' for x in gl) + "</ul>"
     body = f"""<article class="item"><div class="kicker">Тип велосипеда</div><h1>{html.escape(t['ru'])}</h1><p class="en">{html.escape(t['en'])}</p>
 <p class="lead">{inline(t['short'], R)}</p><div class="cols"><div>{P_html(t['text'], R)}<h2>Отличительные черты</h2>{feats}<h2>Уход</h2><p>{inline(t['care'], R)}</p></div><div>{fig(t.get('img'), R)}</div></div></article>"""
-    body += related([("Инструкции для этого типа", guides_html), ("Ключевые детали", chips("part", t["parts"], R)), ("Другие типы", chips("type", [x["id"] for x in TYPES if x["id"] != t["id"]], R))])
+    body += related([("Инструкции для этого типа", guides_html), ("Ключевые детали", chips("part", t["parts"], R)), ("Статьи", chips("art", arts_of.get(("types", t["id"]), []), R)), ("Другие типы", chips("type", [x["id"] for x in TYPES if x["id"] != t["id"]], R))])
     page(rel, t["ru"], body, [("Типы велосипедов", "types/"), (t["ru"], None)], t["short"])
     idx(t["ru"], rel, "Тип велосипеда", t["short"] + " " + t["text"], t["en"])
 # ---------------- Index pages
+def strip(t): return re.sub(r"\[\[\w+:[\w#-]+\|?([^\]]*)\]\]", r"\1", t)
+def imgof(a):
+    i = a.get("img"); return i[0] if isinstance(i, list) else i
 def card(R, href, title, sub, img=None, extra=""):
     im = f'<img src="{R}img/photos/{img}.webp" alt="" loading="lazy">' if img else ""
     return f'<a class="card" href="{R}{href}">{im}<div><h3>{html.escape(title)}</h3><p>{sub}</p>{extra}</div></a>'
@@ -201,10 +224,12 @@ R = Rof("history/")
 tl = ""
 for eid, en in ERAS:
     tl += f'<h2 class="era">{en}</h2><ol class="timeline">'
-    for h in [x for x in HISTORY if x["era"] == eid]:
+    def yk(x):
+        m = re.search(r"\d{4}", x["year"]); return int(m.group()) if m else (1950 if "XX" in x["year"] else 0)
+    for h in sorted([x for x in HISTORY if x["era"] == eid], key=yk):
         tl += f'<li><div class="yr">{html.escape(h["year"])}</div><div class="tbody"><h3>{html.escape(h["title"])}</h3><p>{inline(h["text"], R)}</p>{fig(h.get("img"), R, "tl")}</div></li>'
     tl += "</ol>"
-body = f'<h1>История велосипеда</h1><p class="lead">От «беговой машины» Карла Драйса 1817 года до электровелосипедов и электронных переключателей — {len(HISTORY)} ключевых событий. Только проверенные факты; спорные версии помечены.</p>{fig("rover-ad", R, "float")}{tl}'
+body = f'<h1>История велосипеда</h1><p class="lead">От «беговой машины» Карла Драйса 1817 года до электровелосипедов и электронных переключателей — {len(HISTORY)} ключевых событий. Только проверенные факты; спорные версии помечены.</p>{fig("rover-ad", R, "float")}{tl}<section id="more"><h2>Подробнее</h2><div class="grid">' + "".join(card(R, f"a/{a['id']}/", a["title"], html.escape(strip(a["intro"])[:120]) + "…", imgof(a)) for a in A_HIST) + "</div></section>"
 page("history/", "История велосипеда", body, [("История", None)], "История велосипеда: дрезина, костотряс, пенни-фартинг, безопасный велосипед и современность")
 for h in HISTORY: idx(f'{h["year"]}: {h["title"]}', "history/", "История", h["text"])
 # makers
@@ -246,6 +271,70 @@ R = Rof("credits/")
 rows = "".join(f'<tr id="{k}"><td><img src="{R}img/photos/{k}.webp" alt="" loading="lazy"></td><td><a href="{html.escape(c["source"])}">{html.escape(c["file"])}</a></td><td>{html.escape(c["author"])}</td><td>' + (f'<a href="{html.escape(c["license_url"])}">{html.escape(c["license"])}</a>' if c.get("license_url") else html.escape(c["license"])) + "</td></tr>" for k, c in sorted(CRED.items()))
 body = f'<h1>Источники фотографий и лицензии</h1><p class="lead">Все фотографии на сайте — реальные снимки с Wikimedia Commons, распространяемые под свободными лицензиями (общественное достояние, CC0, CC BY, CC BY-SA). Изображения уменьшены и переведены в формат WebP; иных изменений не вносилось. Схемы и чертежи нарисованы специально для сайта.</p><div class="tablewrap"><table class="cred"><thead><tr><th></th><th>Файл (ссылка на источник)</th><th>Автор</th><th>Лицензия</th></tr></thead><tbody>{rows}</tbody></table></div>'
 page("credits/", "Источники и лицензии", body, [("Источники фото", None)])
+# ---------------- Articles
+acn = {c[0]: c for c in ACATS}
+def table_html(t, R):
+    return '<div class="tablewrap"><table><thead><tr>' + "".join(f"<th>{html.escape(h)}</th>" for h in t["head"]) + "</tr></thead><tbody>" + "".join("<tr>" + "".join(f"<td>{inline(c, R)}</td>" for c in row) + "</tr>" for row in t["rows"]) + "</tbody></table></div>"
+for a in ARTICLES:
+    rel = f"a/{a['id']}/"; R = Rof(rel)
+    secs = ""
+    for sec in a["sections"]:
+        x = f'<section><h2>{html.escape(sec["h"])}</h2>'
+        if sec.get("text"): x += P_html(sec["text"], R)
+        if sec.get("list"): x += "<ul>" + "".join(f"<li>{inline(i, R)}</li>" for i in sec["list"]) + "</ul>"
+        if sec.get("table"): x += table_html(sec["table"], R)
+        if sec.get("img"): x += fig(sec["img"], R, "tl")
+        secs += x + "</section>"
+    imgs = a.get("img"); imgs = imgs if isinstance(imgs, list) else ([imgs] if imgs else [])
+    ph = '<div class="photos">' + "".join(fig(i, R) for i in imgs) + "</div>" if imgs else ""
+    cid, cname, chref, _ = acn[a["cat"]]
+    same = [x["id"] for x in ARTICLES if x["cat"] == a["cat"] and x["id"] != a["id"]]
+    body = f'<article class="item art"><div class="kicker">{cname}</div><h1>{html.escape(a["title"])}</h1><p class="lead">{inline(a["intro"], R)}</p>{ph}{secs}</article>'
+    body += related([("Детали", chips("part", a.get("parts", []), R)), ("Инструкции", chips("guide", a.get("guides", []), R)), ("Инструмент", chips("tool", a.get("tools", []), R)), ("Типы велосипедов", chips("type", a.get("types", []), R)), ("Ещё в разделе", chips("art", same, R))])
+    page(rel, a["title"], body, [(cname, chref), (a["title"], None)], strip(a["intro"])[:150])
+    alltext = a["intro"] + " " + " ".join(sec.get("text", "") + " " + " ".join(sec.get("list", [])) + " " + " ".join(" ".join(r) for r in sec.get("table", {}).get("rows", [])) for sec in a["sections"])
+    idx(a["title"], rel, "Статья · " + cname, alltext)
+EXTRA = {"compat": [("art", "Калькуляторы", "calc/")], "susp": [("guide", "sag-setup", None), ("guide", "fork-lowers", None), ("guide", "lefty-service", None)],
+         "ebike": [("guide", "ebike-care", None)], "buy": [("guide", "m-check", None), ("guide", "bike-fit-saddle", None)], "frames": [("page", "Собрать велосипед самому", "build/")]}
+for cid, cname, chref, cdesc in ACATS:
+    if cid == "hist": continue
+    R = Rof(chref)
+    cards = "".join(card(R, f"a/{a['id']}/", a["title"], html.escape(strip(a["intro"])[:130]) + "…", imgof(a)) for a in ARTICLES if a["cat"] == cid)
+    ex = ""
+    for kind, x, href in EXTRA.get(cid, []):
+        if kind == "guide": ex += card(R, f"guides/{x}/", G[x]["title"], badge(G[x]["level"]) + " Инструкция")
+        else: ex += card(R, href, x, "Раздел")
+    body = f'<h1>{cname}</h1><p class="lead">{cdesc}</p><div class="grid">{cards}{ex}</div>'
+    page(chref, cname, body, [(cname, None)], cdesc)
+    idx(cname, chref, "Раздел", cdesc)
+# ---------------- Calculators
+R = Rof("calc/")
+calc_body = f"""<h1>Калькуляторы</h1><p class="lead">Расчёты выполняются прямо в браузере. Результаты — ориентировочные: для точной подборки деталей сверяйтесь с данными производителя.</p>
+<p class="chips"><a href="#tyre">Размер шины</a> <a href="#gear">Передачи и скорость</a> <a href="#chain">Длина цепи</a> <a href="#spoke">Длина спиц</a> <a href="#pressure">Давление в шинах</a></p>
+<section class="calc" id="tyre"><h2>Размер шины: ETRTO ↔ дюймы ↔ французская система</h2>
+<label>Посадочный диаметр (BSD)<select id="t_bsd"></select></label><label>Ширина шины, мм<input id="t_w" type="number" value="37" min="16" max="130"></label>
+<div class="out" id="t_out"></div><p class="disc">Полная таблица размеров — в статье <a href="{R}a/compat-wheels/">«Размеры колёс и шин»</a>.</p></section>
+<section class="calc" id="gear"><h2>Передаточные отношения, gear inches и скорость</h2>
+<label>Передние звёзды (через запятую)<input id="g_rings" value="50, 34"></label><label>Кассета (через запятую)<input id="g_cogs" value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28"></label>
+<label>Обод (BSD)<select id="g_bsd"></select></label><label>Ширина шины, мм<input id="g_w" type="number" value="28"></label><label>Каденс, об/мин<input id="g_cad" type="number" value="90"></label>
+<div class="out" id="g_out"></div></section>
+<section class="calc" id="chain"><h2>Длина цепи (ориентировочно)</h2>
+<label>Длина нижних перьев, мм<input id="c_cs" type="number" value="430"></label><label>Самая большая передняя звезда<input id="c_f" type="number" value="50"></label><label>Самая большая задняя звезда<input id="c_r" type="number" value="28"></label>
+<div class="out" id="c_out"></div></section>
+<section class="calc" id="spoke"><h2>Длина спиц</h2>
+<label>ERD обода, мм<input id="s_erd" type="number" value="600" step="0.1"></label><label>Диаметр фланца (PCD), мм<input id="s_pcd" type="number" value="45" step="0.1"></label>
+<label>Центр → левый фланец, мм<input id="s_wl" type="number" value="35" step="0.1"></label><label>Центр → правый фланец, мм<input id="s_wr" type="number" value="20" step="0.1"></label>
+<label>Спиц в колесе<input id="s_n" type="number" value="32"></label><label>Кресты<input id="s_x" type="number" value="3" min="0" max="4"></label><label>Отверстие фланца, мм<input id="s_h" type="number" value="2.6" step="0.1"></label>
+<div class="out" id="s_out"></div><p class="disc">Как собрать колесо — <a href="{R}guides/wheel-build/">инструкция</a>.</p></section>
+<section class="calc" id="pressure"><h2>Давление в шинах — приблизительный ориентир</h2>
+<label>Ширина шины, мм<input id="p_w" type="number" value="35"></label><label>Вес ездока с велосипедом, кг<input id="p_kg" type="number" value="85"></label>
+<label>Покрытие<select id="p_s"><option value="asphalt">Асфальт</option><option value="gravel">Грунт, гравий</option><option value="trail">Тропы МТБ</option><option value="snow">Снег, песок (фэтбайк)</option></select></label>
+<label>Бескамерка<input id="p_tl" type="checkbox"></label>
+<div class="out" id="p_out"></div><p class="disc">Как накачивать — <a href="{R}guides/pumping/">инструкция</a>.</p></section>"""
+page("calc/", "Калькуляторы", calc_body, [("Калькуляторы", None)], "Калькуляторы: размер шины ETRTO, передачи и скорость, длина цепи, длина спиц, давление", js="calc.js?v=1")
+for t_, a_ in [("Калькулятор размера шины ETRTO", "tyre"), ("Калькулятор передач, gear inches и скорости", "gear"), ("Калькулятор длины цепи", "chain"), ("Калькулятор длины спиц", "spoke"), ("Давление в шинах — ориентир", "pressure")]:
+    idx(t_, f"calc/#{a_}", "Калькулятор", t_)
+
 # home
 R = ""
 sec = [("history/", "История", f"{len(HISTORY)} вех: от дрезины 1817 года до e-bike", "penny"),
@@ -255,12 +344,18 @@ sec = [("history/", "История", f"{len(HISTORY)} вех: от дрезин
        ("tools/", "Инструмент", f"{len(TOOLS)} инструментов: что и зачем", "park-tools"),
        ("makers/", "Производители", f"{len(MAKERS)} брендов и стран", "rear-derailleur"),
        ("build/", "Собрать самому", "Совместимость и порядок сборки", "chain-tool"),
-       ("glossary/", "Словарь", "Термины RU / EN с объяснением", "valves")]
+       ("glossary/", "Словарь", "Термины RU / EN с объяснением", "valves"),
+       ("compat/", "Совместимость", "Скорости, барабаны, каретки, колонки, тормоза, оси", "headset-exploded"),
+       ("calc/", "Калькуляторы", "Шины, передачи, цепь, спицы, давление", "wheel-build"),
+       ("suspension/", "Подвеска", "RockShox, Fox, SR Suntour, Lefty, настройка сага", "fox-float"),
+       ("ebike/", "Электровелосипеды", "Bosch, Shimano, Yamaha, Panasonic, Bafang, батареи", "bosch-cx"),
+       ("buy/", "Покупка и подбор", "Б/у японский велосипед, размер рамы", "bridgestone"),
+       ("frames/", "Рамостроение", "Муфты, TIG, пайка, карбон, бамбук", "lugs-head")]
 cards = "".join(card(R, h, t, s, i) for h, t, s, i in sec)
-path_g = ["m-check", "nexus-tube", "chain-clean", "rd-adjust", "wheel-true", "lefty-service"]
+path_g = ["m-check", "nexus-tube", "sag-setup", "chain-clean", "rd-adjust", "sa3-tube", "wheel-true", "wheel-build", "lefty-service"]
 pg = "".join(f'<a class="pathstep" href="guides/{g}/">{badge(G[g]["level"])}<span>{html.escape(G[g]["title"])}</span></a>' for g in path_g)
 body = f"""<section class="hero"><div><h1>Вело-вселенная</h1><p class="lead">Всё о велосипедах в одном месте: история, устройство, названия деталей, инструмент и пошаговые инструкции — от замены камеры на планетарной втулке до разбора вилки Cannondale Lefty.</p>
-<p class="stats"><span><b>{len(HISTORY)}</b> вех истории</span><span><b>{len(PARTS)}</b> деталей</span><span><b>{len(TYPES)}</b> типов</span><span><b>{len(TOOLS)}</b> инструментов</span><span><b>{len(GUIDES)}</b> инструкций</span><span><b>{len(terms)}</b> терминов</span></p></div>
+<p class="stats"><span><b>{len(HISTORY)}</b> вех истории</span><span><b>{len(PARTS)}</b> деталей</span><span><b>{len(TYPES)}</b> типов</span><span><b>{len(TOOLS)}</b> инструментов</span><span><b>{len(GUIDES)}</b> инструкций</span><span><b>{len(terms)}</b> терминов</span><span><b>{len(ARTICLES)}</b> статей</span><span><b>5</b> калькуляторов</span></p></div>
 <div class="herosvg">{DIAGRAMS['anatomy'][1](R)}</div></section>
 <h2>Разделы</h2><div class="grid">{cards}</div>
 <h2>Мастерская: от простого к сложному</h2><div class="path">{pg}</div>

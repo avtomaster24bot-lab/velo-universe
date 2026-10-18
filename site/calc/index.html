@@ -1,0 +1,35 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Калькуляторы — Вело-вселенная</title><meta name="description" content="Калькуляторы: размер шины ETRTO, передачи и скорость, длина цепи, длина спиц, давление">
+<link rel="icon" href="../img/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="../css/style.css?v=2">
+<script>document.documentElement.dataset.theme=localStorage.getItem('vu-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')</script>
+</head><body data-root="../">
+<header class="top"><div class="wrap topin"><a class="logo" href="../"><img src="../img/favicon.svg" alt="" width="28" height="28"><span>Вело<b>вселенная</b></span></a>
+<div class="search"><input id="q" type="search" placeholder="Поиск: камера, Nexus, каретка, Lefty…" autocomplete="off" aria-label="Поиск по сайту"><div id="sr" class="sr" hidden></div></div>
+<button id="theme" class="iconbtn" aria-label="Сменить тему">◐</button><button id="menu" class="iconbtn" aria-label="Меню">☰</button></div>
+<nav class="mainnav wrap" id="nav"><a href="../history/">История</a><a href="../anatomy/">Устройство</a><a href="../types/">Типы</a><a href="../guides/">Инструкции</a><a href="../tools/">Инструмент</a><a href="../compat/">Совместимость</a><a href="../calc/">Калькуляторы</a><a href="../suspension/">Подвеска</a><a href="../ebike/">Электро</a><a href="../buy/">Покупка</a><a href="../makers/">Производители</a><a href="../build/">Собрать самому</a><a href="../frames/">Рамы</a><a href="../glossary/">Словарь</a></nav></header>
+<main class="wrap"><nav class="crumbs" aria-label="Навигация"><a href="../">Главная</a> <span>›</span> <b>Калькуляторы</b></nav><h1>Калькуляторы</h1><p class="lead">Расчёты выполняются прямо в браузере. Результаты — ориентировочные: для точной подборки деталей сверяйтесь с данными производителя.</p>
+<p class="chips"><a href="#tyre">Размер шины</a> <a href="#gear">Передачи и скорость</a> <a href="#chain">Длина цепи</a> <a href="#spoke">Длина спиц</a> <a href="#pressure">Давление в шинах</a></p>
+<section class="calc" id="tyre"><h2>Размер шины: ETRTO ↔ дюймы ↔ французская система</h2>
+<label>Посадочный диаметр (BSD)<select id="t_bsd"></select></label><label>Ширина шины, мм<input id="t_w" type="number" value="37" min="16" max="130"></label>
+<div class="out" id="t_out"></div><p class="disc">Полная таблица размеров — в статье <a href="../a/compat-wheels/">«Размеры колёс и шин»</a>.</p></section>
+<section class="calc" id="gear"><h2>Передаточные отношения, gear inches и скорость</h2>
+<label>Передние звёзды (через запятую)<input id="g_rings" value="50, 34"></label><label>Кассета (через запятую)<input id="g_cogs" value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28"></label>
+<label>Обод (BSD)<select id="g_bsd"></select></label><label>Ширина шины, мм<input id="g_w" type="number" value="28"></label><label>Каденс, об/мин<input id="g_cad" type="number" value="90"></label>
+<div class="out" id="g_out"></div></section>
+<section class="calc" id="chain"><h2>Длина цепи (ориентировочно)</h2>
+<label>Длина нижних перьев, мм<input id="c_cs" type="number" value="430"></label><label>Самая большая передняя звезда<input id="c_f" type="number" value="50"></label><label>Самая большая задняя звезда<input id="c_r" type="number" value="28"></label>
+<div class="out" id="c_out"></div></section>
+<section class="calc" id="spoke"><h2>Длина спиц</h2>
+<label>ERD обода, мм<input id="s_erd" type="number" value="600" step="0.1"></label><label>Диаметр фланца (PCD), мм<input id="s_pcd" type="number" value="45" step="0.1"></label>
+<label>Центр → левый фланец, мм<input id="s_wl" type="number" value="35" step="0.1"></label><label>Центр → правый фланец, мм<input id="s_wr" type="number" value="20" step="0.1"></label>
+<label>Спиц в колесе<input id="s_n" type="number" value="32"></label><label>Кресты<input id="s_x" type="number" value="3" min="0" max="4"></label><label>Отверстие фланца, мм<input id="s_h" type="number" value="2.6" step="0.1"></label>
+<div class="out" id="s_out"></div><p class="disc">Как собрать колесо — <a href="../guides/wheel-build/">инструкция</a>.</p></section>
+<section class="calc" id="pressure"><h2>Давление в шинах — приблизительный ориентир</h2>
+<label>Ширина шины, мм<input id="p_w" type="number" value="35"></label><label>Вес ездока с велосипедом, кг<input id="p_kg" type="number" value="85"></label>
+<label>Покрытие<select id="p_s"><option value="asphalt">Асфальт</option><option value="gravel">Грунт, гравий</option><option value="trail">Тропы МТБ</option><option value="snow">Снег, песок (фэтбайк)</option></select></label>
+<label>Бескамерка<input id="p_tl" type="checkbox"></label>
+<div class="out" id="p_out"></div><p class="disc">Как накачивать — <a href="../guides/pumping/">инструкция</a>.</p></section></main>
+<footer class="foot"><div class="wrap"><p><b>Вело-вселенная</b> — открытый справочник и виртуальная веломастерская: история, устройство, инструмент и инструкции.</p>
+<p class="partners"><a href="https://avtomaster24bot-lab.github.io/velopark-panasonic/">Velopark.kz</a> — японские велосипеды, электровелосипеды Panasonic и запчасти · <a href="https://avtomaster24bot-lab.github.io/velomarket/">VeloMarket</a> — объявления о продаже велосипедов и запчастей</p>
+<p class="small">Инструкции носят справочный характер. Моменты затяжки и порядок работ для конкретной модели всегда сверяйте с мануалом производителя. Фото — Wikimedia Commons, см. <a href="../credits/">источники и лицензии</a>; схемы нарисованы для сайта.</p></div></footer>
+<script src="../js/app.js?v=2" defer></script><script src="../js/calc.js?v=1" defer></script></body></html>

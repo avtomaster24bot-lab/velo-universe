@@ -43,7 +43,10 @@ IM={
 'workshop':"Ben's Bikes, Namibia (10677004674).jpg",
 }
 os.makedirs('site/img/photos',exist_ok=True)
-credits={}
+credits=json.load(open('content/credits.json')) if os.path.exists('content/credits.json') else {}
+import sys
+if len(sys.argv)>1: IM=json.load(open(sys.argv[1]))
+IM={k:v for k,v in IM.items() if k not in credits}
 def clean(s): return re.sub(r'\s+',' ',re.sub('<[^>]+>','',s or '')).strip()
 for k,t in IM.items():
     u='https://commons.wikimedia.org/w/api.php?'+urllib.parse.urlencode(dict(action='query',titles='File:'+t,prop='imageinfo',iiprop='url|extmetadata',iiurlwidth=1200,format='json'))
